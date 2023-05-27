@@ -1,34 +1,25 @@
-import {
-    InputBody,
-    InputBodyType,
-    OutputError,
-    OutputErrorType,
-    OutputSuccess,
-    OutputSuccessType
-} from "@/core"
+import { RequestBodyCodec } from '@/core'
+import { pipe } from 'fp-ts/function'
+import * as E from 'fp-ts/Either'
 
-export type BodyAdapterType = InputBodyType
-
-export const input: BodyAdapterType = (RequestBodyCodec) => {
-    return InputBody(RequestBodyCodec)
+export const input = (RequestBody: unknown) => {
+  return pipe(
+    RequestBody,
+    RequestBodyCodec.decode,
+    console.log,
+  )
 }
 
+// export type OutputErrorAdapterType = OutputErrorType
 
+// export const outputError: OutputErrorAdapterType = (OutputErroBody) => {
+//   return OutputError(OutputErroBody)
+// }
 
-export type OutputErrorAdapterType = OutputErrorType
+// export type OutputSuccessAdapterType = OutputSuccessType
 
-export const outputError: OutputErrorAdapterType = (OutputErroBody) => {
-    return OutputError(OutputErroBody)
-}
+// export const outputSuccess: OutputSuccessAdapterType = (OutputSuccessBody) => {
+//   return OutputSuccess(OutputSuccessBody)
+// }
 
-
-
-export type OutputSuccessAdapterType = OutputSuccessType
-
-export const outputSuccess: OutputSuccessAdapterType = (OutputSuccessBody) => {
-    return OutputSuccess(OutputSuccessBody)
-}
-
-
-
-export type OutInType = BodyAdapterType | OutputErrorAdapterType | OutputSuccessAdapterType
+// export type OutInType = BodyAdapterType | OutputErrorAdapterType | OutputSuccessAdapterType

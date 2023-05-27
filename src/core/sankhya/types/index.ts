@@ -1,4 +1,4 @@
-export * from './inputBody'
+export * from './input-body'
 export * from './login'
-export * from './outputError'
-export * from './outputSuccsess'
+export * from './output-error'
+export * from './output-succsess'
