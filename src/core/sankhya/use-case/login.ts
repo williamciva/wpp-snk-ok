@@ -1,11 +1,10 @@
 import { post } from "@/ports/sankhya";
 import { Login } from "../types/login";
-import { Body } from "../types/body";
+import { Body } from "../types/inputBody";
 import { env } from "@/helpers";
-import { OutputBody } from "../types/outputBody";
-import { OutputErrorBody } from "../types/outputErrorBody";
+import { OutputBody } from "../types/outputSuccsess";
+import { OutputErrorBody } from "../types/outputError";
 
-export var JSESSIONID: string = '';
 
 const rb: Login = {
     NOMUSU: {
@@ -25,7 +24,6 @@ type Output = OutputBody | OutputErrorBody
 var output: Output;
 
 const login = async () => {
-    console.log(data)
     output = await post(data, '/mge/service.sbr', 'MobileLoginSP.login') as OutputBody
     if (output.status === 1) {
         output as OutputBody

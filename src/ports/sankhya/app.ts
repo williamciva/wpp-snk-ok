@@ -1,5 +1,5 @@
+import { OutInType } from '@/adapters/core/sankhya/functions/in-out-types'
 import { JSESSIONID } from '@/core'
-import { Body, } from '@/core/sankhya/types/body'
 import { env } from '@/helpers'
 import axios, { AxiosRequestConfig } from 'axios'
 
@@ -8,7 +8,7 @@ const CONFIG: AxiosRequestConfig = {
 
 }
 
-type Post = (data: Body, path: string, serviceName: string) => Promise<any>
+export type Post = (data: OutInType, path: string, serviceName: string) => Promise<any>
 
 export const post: Post = async (data, path, serviceName) => {
 
