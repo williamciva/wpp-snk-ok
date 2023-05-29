@@ -1,13 +1,17 @@
-import { loginCodec } from './login'
+import { withMessage } from 'io-ts-types'
+import { LoginCodec } from './requests/login'
 import * as t from 'io-ts'
 
 // RequestBody Typing
 export const RequestBodyLogicCodec =
-  t.intersection(
-    [
-      loginCodec,
-      t.unknown,
-    ],
+  withMessage(
+    t.union(
+      [
+        LoginCodec,
+        t.null,
+      ],
+    ),
+    () => requestBodyMessage
   )
 
 export type RequestBodyLogic = t.TypeOf<typeof RequestBodyLogicCodec>
@@ -18,3 +22,5 @@ export const RequestBodyCodec = t.type({
 })
 
 export type RequestBody = t.TypeOf<typeof RequestBodyCodec>
+
+export const requestBodyMessage = 'Invalid Request Body.'

@@ -1,5 +1,5 @@
 import { post } from '@/ports/sankhya'
-import { Login } from '../types/login'
+import { Login } from '../types/requests/login'
 import { env } from '@/helpers'
 
 const rb = {
