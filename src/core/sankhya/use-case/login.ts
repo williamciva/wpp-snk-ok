@@ -26,14 +26,20 @@ pipe(
   RequestBodyCodec.decode,
   E.fold(
     (errors) => { throw new Error(getErrorMessage(errors, ':::')) },
-    (valueEncoded) => postRequestBody(valueEncoded, PATH, SERVICE)
-  ),
-  (response) => ResponseBodyLoginCodec.decode(response.responseBody),
-  E.fold(
-    (errors) => { throw new Error(getErrorMessage(errors, ':::')) },
-    (loginResponse) => {
-      setJSessionId(loginResponse.jsessionid.$)
-      console.log(loginResponse)
-    }
+    (valueEncoded) => postRequestBody(valueEncoded, PATH, SERVICE).then(
+      (response) => {
+        return pipe(
+          ResponseBodyLoginCodec.decode(response),
+          E.fold(
+            (errors) => { throw new Error(getErrorMessage(errors, ':::')) },
+            (loginResponse) => {
+              setJSessionId(loginResponse.jsessionid.$)
+              console.log(loginResponse)
+            }
+          )
+        )
+      },
+    )
   )
+
 )

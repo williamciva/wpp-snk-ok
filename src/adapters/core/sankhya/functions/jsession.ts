@@ -1,4 +1,4 @@
-import { getJSessionId, setJSessionId } from '@/core'
+import { getJSessionId as getJSessionIdCore, setJSessionId as setJsessionIdCore } from '@/core'
 
-export const getJsessionId = (): string => getJSessionId()
-// export const setJsessionId = (jsessionid: string): boolean => setJSessionId(jsessionid)
+export function getJSessionId(): string { return getJSessionIdCore() }
+export function setJSessionId(jsessionid: string): boolean { return setJsessionIdCore(jsessionid) }
