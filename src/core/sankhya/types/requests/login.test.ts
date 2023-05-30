@@ -4,7 +4,7 @@ import * as TE from 'fp-ts/TaskEither'
 import { LoginCodec, invalidLoginMessage } from './login'
 
 
-export const login = {
+const login = {
   NOMUSU: {
     $: "USERNAME"
   },
@@ -13,14 +13,14 @@ export const login = {
   }
 }
 
-export const invalidLogin = {
+const invalidLogin = {
   NOMUSU: "USERNAME",
   INTERNO: {
     $: "@p@ssW0rd"
   }
 }
 
-export const responseBodyLogin = {
+const responseBodyLogin = {
   callID: {
     $: "74A5FF86EC6D98046DDAC58542682817"
   },

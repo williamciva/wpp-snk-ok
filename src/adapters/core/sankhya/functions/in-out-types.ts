@@ -1,14 +1,7 @@
-import { RequestBodyCodec } from '@/core'
-import { pipe } from 'fp-ts/function'
-import * as E from 'fp-ts/Either'
+import { RequestBody } from '@/core'
 
-export const input = (RequestBody: unknown) => {
-  return pipe(
-    RequestBody,
-    RequestBodyCodec.decode,
-    console.log,
-  )
-}
+
+export type Body = RequestBody;
 
 // export type OutputErrorAdapterType = OutputErrorType
 

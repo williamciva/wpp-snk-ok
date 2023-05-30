@@ -1,32 +1,39 @@
-import { post } from '@/ports/sankhya'
-import { Login } from '../types/requests/login'
-import { env } from '@/helpers'
+import { env } from "@/helpers";
+import { pipe } from "fp-ts/lib/pipeable";
+import { RequestBodyCodec, ResponseBodyLoginCodec } from "../types";
+import { postRequestBody } from "@/adapters/ports/sankhya/post";
+import * as E from 'fp-ts/Either'
+import { getErrorMessage } from "@/helpers/get-error-message";
+import { setJSessionId } from "./sankhya";
 
-const rb = {
-  NOMUSU: {
-    $: env('NOMUSU'),
-  },
-  INTERNO: {
-    $: env('PASSWORD'),
-  },
-}
-
-const data: Body = {
-  requestBody: rb,
-}
-
-type Output = OutputBody | OutputErrorBody
-let output: Output
-
-const login = async () => {
-  output = await post(data, '/mge/service.sbr', 'MobileLoginSP.login') as OutputBody
-  if (output.status === 1) {
-        output as OutputBody
-        JSESSIONID = typeof output.requestBody?.jsessionid === 'string' ? output.requestBody.jsessionid : ''
-  } else {
-    return output as OutputErrorBody
+const reqBodyLogin = {
+  requestBody: {
+    NOMUSU: {
+      $: env('NOMUSU'),
+    },
+    INTERNO: {
+      $: env('PASSWORD'),
+    },
   }
 }
 
-login();
-(async () => console.log(await JSESSIONID))()
+const PATH = '/mge/service.sbr'
+const SERVICE = 'MobileLoginSP.login'
+
+
+pipe(
+  reqBodyLogin,
+  RequestBodyCodec.decode,
+  E.fold(
+    (errors) => { throw new Error(getErrorMessage(errors, ':::')) },
+    (valueEncoded) => postRequestBody(valueEncoded, PATH, SERVICE)
+  ),
+  (response) => ResponseBodyLoginCodec.decode(response.responseBody),
+  E.fold(
+    (errors) => { throw new Error(getErrorMessage(errors, ':::')) },
+    (loginResponse) => {
+      setJSessionId(loginResponse.jsessionid.$)
+      console.log(loginResponse)
+    }
+  )
+)

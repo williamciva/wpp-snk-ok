@@ -1,38 +1,29 @@
-import { OutInType } from '@/adapters/core/sankhya/functions/in-out-types'
-import { JSESSIONID } from '@/core'
+import { getJsessionId } from '@/adapters/core/sankhya/functions/jsession'
 import { env } from '@/helpers'
 import axios, { AxiosRequestConfig } from 'axios'
+import { pipe } from 'fp-ts/function'
+import * as TE from 'fp-ts/TaskEither'
 
 const SERVER: string = env('SERVER')
 const CONFIG: AxiosRequestConfig = {
 
 }
 
-export type Post = (data: OutInType, path: string, serviceName: string) => Promise<any>
+export type Post = (data: unknown, path: string, serviceName: string) => Promise<unknown>
 
 export const post: Post = async (data, path, serviceName) => {
-
-    try {
-        const response = await axios.post(
-            new URL(SERVER + path + `?serviceName=${serviceName}&mgeSession${JSESSIONID}&outputType=json`).href,
-            data,
-            CONFIG
+    return pipe(
+        TE.tryCatch(
+            () => axios.post(
+                new URL(SERVER + path + `?serviceName=${serviceName}&mgeSession${getJsessionId()}&outputType=json`).href,
+                data,
+                CONFIG
+            ),
+            () => TE.throwError,
+        ),
+        TE.fold(
+            (error) => { throw error },
+            (response) => { if (response.statusText === 'OK') { return response.data } throw new Error(response.status + ' - ' + response.statusText) }
         )
-
-        if (response.statusText === 'OK') {
-
-            return response.data
-
-        } else {
-
-            throw new Error(response.status + ' - ' + response.statusText)
-
-        }
-
-    } catch (error) {
-
-        throw new Error("Impossible parser response.\n" + error)
-
-    }
-
+    )()
 }

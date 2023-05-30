@@ -1,2 +1,2 @@
-import '@/ports/wa-automate'
+// import '@/ports/wa-automate'
 import '@/core'
