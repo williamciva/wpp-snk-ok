@@ -1,6 +1,6 @@
 import { env } from "@/helpers";
 import { pipe } from "fp-ts/lib/pipeable";
-import { RequestBodyCodec, ResponseBodyLoginCodec } from "../types";
+import { RequestBodyCodec, ResponseBodyCodec, ResponseBodyLoginCodec } from "../types";
 import { postRequestBody } from "@/adapters/ports/sankhya/post";
 import * as E from 'fp-ts/Either'
 import { getErrorMessage } from "@/helpers/get-error-message";
@@ -20,7 +20,6 @@ const reqBodyLogin = {
 const PATH = '/mge/service.sbr'
 const SERVICE = 'MobileLoginSP.login'
 
-
 pipe(
   reqBodyLogin,
   RequestBodyCodec.decode,
@@ -29,7 +28,12 @@ pipe(
     (valueEncoded) => postRequestBody(valueEncoded, PATH, SERVICE).then(
       (response) => {
         return pipe(
-          ResponseBodyLoginCodec.decode(response),
+          ResponseBodyCodec.decode(response),
+          E.fold(
+            (errors) => { throw new Error(getErrorMessage(errors, ':::')) },
+            (loginResponse) => loginResponse.responseBody
+          ),
+          ResponseBodyLoginCodec.decode,
           E.fold(
             (errors) => { throw new Error(getErrorMessage(errors, ':::')) },
             (loginResponse) => {
