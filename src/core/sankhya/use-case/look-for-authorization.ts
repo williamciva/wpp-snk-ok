@@ -1,15 +1,23 @@
 import { env, timer } from "@/helpers";
+import { pipe } from "fp-ts/lib/function";
 
 
-const timeOut: number = getTimeOutEnv()
+const timeOut: number = getTimeOutEnv();
 
 
-while (true){
-    
-    
 
-    timer(timeOut);
-}
+
+(() => {
+    while (true) {
+
+        // pipe(
+            
+        // )
+
+        timer(timeOut);
+    }
+})()
+
 
 
 function getTimeOutEnv(): number {

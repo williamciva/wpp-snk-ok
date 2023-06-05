@@ -1,49 +1,30 @@
 import { env } from "@/helpers";
-import { pipe } from "fp-ts/lib/pipeable";
-import { RequestBodyCodec, ResponseBodyCodec, ResponseBodyLoginCodec } from "../types";
 import { postRequestBody } from "@/adapters/ports/sankhya/post";
-import * as E from 'fp-ts/Either'
-import { getErrorMessage } from "@/helpers/get-error-message";
 import { setJSessionId } from "./sankhya";
+import { Login, OutLogin } from "../types/login";
+import { RequestBody } from "../types/request-body";
 
-const reqBodyLogin = {
-  requestBody: {
-    NOMUSU: {
-      $: env('NOMUSU'),
-    },
-    INTERNO: {
-      $: env('PASSWORD'),
-    },
-  }
+
+const login: Login = {
+  NOMUSU: {
+    $: env('NOMUSU'),
+  },
+  INTERNO: {
+    $: env('PASSWORD'),
+  },
 }
 
-const PATH = '/mge/service.sbr'
-const SERVICE = 'MobileLoginSP.login'
+const body: RequestBody = {
+  requestBody: login
+}
 
-pipe(
-  reqBodyLogin,
-  RequestBodyCodec.decode,
-  E.fold(
-    (errors) => { throw new Error(getErrorMessage(errors, ':::')) },
-    (valueEncoded) => postRequestBody(valueEncoded, PATH, SERVICE).then(
-      (response) => {
-        return pipe(
-          ResponseBodyCodec.decode(response),
-          E.fold(
-            (errors) => { throw new Error(getErrorMessage(errors, ':::')) },
-            (loginResponse) => loginResponse.responseBody
-          ),
-          ResponseBodyLoginCodec.decode,
-          E.fold(
-            (errors) => { throw new Error(getErrorMessage(errors, ':::')) },
-            (loginResponse) => {
-              setJSessionId(loginResponse.jsessionid.$)
-              console.log(loginResponse)
-            }
-          )
-        )
-      },
-    )
-  )
+const path = '/mge/service.sbr'
+const service = 'MobileLoginSP.login'
 
+postRequestBody(body, path, service).then(
+  (response) => {
+    const responseBody: OutLogin = response.responseBody as OutLogin
+    setJSessionId(responseBody.jsessionid.$)
+    console.log(response)
+  }
 )

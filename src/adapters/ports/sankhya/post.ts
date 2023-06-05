@@ -1,9 +1,9 @@
-import { RequestBody, ResponseBody, ResponseBodyCodec } from "@/core";
 import { post } from "@/ports/sankhya";
 import { pipe } from "fp-ts/function";
 import * as TE from 'fp-ts/TaskEither'
 import * as T from 'fp-ts/Task'
-import { getErrorMessage } from "@/helpers/get-error-message";
+import { RequestBody } from "@/core/sankhya/types/request-body";
+import { ResponseBody } from "@/core/sankhya/types/response-body";
 
 export const postRequestBody = (data: RequestBody, path: string, serviceName: string): Promise<ResponseBody> => {
     return pipe(
@@ -16,11 +16,7 @@ export const postRequestBody = (data: RequestBody, path: string, serviceName: st
                 console.error('Erro:', error);
                 throw error;
             },
-            (response) => TE.fromEither(ResponseBodyCodec.decode(response))
+            (response) => T.task.of(response as ResponseBody)
         ),
-        TE.fold(
-            (errors) => { throw new Error(getErrorMessage(errors, ':::')) },
-            (responseBody) => T.task.of(responseBody)
-        )
     )()
 }
