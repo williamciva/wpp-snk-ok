@@ -1,17 +1,11 @@
-const loadRecords = (...fields: string[]) => {
-    const response = [["abcd", "efgh", "ijkl"], ["abcd", "efgh", "ijkl"], ["abcd", "efgh", "ijkl"]]
+export const objectConstructor = (fields: string[], responses: string[][]) => {
+    const l_array: { [key: string]: string | undefined }[] = [];
 
-    var l_obj = []
-
-    for (let array of response) {
-        for (let index in array) {
-            const key = fields[index];
-            if (typeof key === "string") {
-                l_obj.push({
-                    [key]: array[index]
-                })
-            }
-        }
+    for (const array of responses) {
+        const obj: { [key: string]: string | undefined } = {};
+        fields.forEach((key, idx) => (obj[key] = array.find((e, i) => i === idx)));
+        l_array.push(obj);
     }
-    return l_obj;
-}
+
+    return l_array;
+};

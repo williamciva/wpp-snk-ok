@@ -7,8 +7,11 @@ import * as T from 'fp-ts/Task'
 
 const SERVER: string = env('SERVER')
 const CONFIG: AxiosRequestConfig = {
-
+    headers: {
+        "Cookie": `JSESSIONID=${getJSessionId()}`
+    }
 }
+
 
 export const post = async (
     data: unknown,
@@ -20,7 +23,7 @@ export const post = async (
         const url = new URL(
             SERVER +
             path +
-            `?serviceName=${serviceName}&mgeSession=${getJSessionId()}&outputType=json`
+            `?serviceName=${serviceName}&outputType=json`
         ).href;
 
         return TE.tryCatch(

@@ -1,23 +1,23 @@
 export type LoadRecords = {
-    dataSetID: string | undefined,
+    dataSetID?: string,
     entityName: string,
-    standAlone: boolean | undefined,
+    standAlone?: boolean,
     fields: string[],
-    tryJoinedFields: boolean | undefined,
-    parallelLoader: boolean | undefined,
-    crudListener: string | undefined,
+    tryJoinedFields?: boolean,
+    parallelLoader?: boolean,
+    crudListener?: string,
     criteria: {
         expression: string,
         parameters: {
             type: string
             value: number | string | boolean
         }[]
-    },
-    ignoreListenerMethods: string,
-    useDefaultRowsLimit: boolean | undefined,
-    clientEventList: {
+    } | undefined,
+    ignoreListenerMethods?: string,
+    useDefaultRowsLimit?: boolean,
+    clientEventList?: {
         clientrEvent: { $: string }[]
-    } | undefined
+    }
 }
 
 export type OutLoadRecords = {
