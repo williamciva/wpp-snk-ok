@@ -4,28 +4,32 @@ import {
     MessageContent,
     MessageSendOptions
 } from 'whatsapp-web.js'
-import { generate } from 'qrcode-terminal';
+import qrcode from 'qrcode-terminal';
 
+var ready = false;
 
 const client = new Client({
     authStrategy: new LocalAuth({ clientId: "client-key" })
 });
 
 client.on('qr', (qr) => {
-    generate(qr, { small: true });
+    console.log("ENTREI AQ")
+    qrcode.generate(qr, { small: true });
 });
 
 client.on('ready', () => {
-    console.log('Client is ready!');
+    ready = true;
 });
 
 client.initialize();
 
 
 export const sendMessage = async (phoneNumber: string, content: MessageContent, options?: MessageSendOptions | undefined) => {
-    try {
+    if (ready) {
         client.sendMessage(`${phoneNumber}@c.us`, content, options)
-    } catch (error) {
-        console.log('Not sending message.')
+    } else {
+        console.log("Client not ready.")
     }
 }
+
+export const isReady = () => ready

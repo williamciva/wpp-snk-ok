@@ -5,6 +5,7 @@ import { LoadRecords, OutLoadRecords } from "../types/load-records";
 import { objectConstructor } from "../utils/load-records";
 import { Alcada } from "../types/alcada";
 import sendAuthorization from "./send-authorization";
+import { isReady } from "@/adapters/ports/whatsapp/is-ready";
 
 
 const timeOut: number = getTimeOutEnv();
@@ -60,26 +61,30 @@ const service = 'DatasetSP.loadRecords';
 
 export default async () => {
     while (true) {
-        console.log("Looking for new records");
+        if (isReady()) {
+            console.log("Looking for new records");
 
-        postRequestBody(body, path, service).then(
-            (response) => {
-                try {
-                    const responseBody: OutLoadRecords = response.responseBody as OutLoadRecords
-                    const obj = objectConstructor(fieldsSearch, responseBody.result)
+            postRequestBody(body, path, service).then(
+                (response) => {
+                    try {
+                        const responseBody: OutLoadRecords = response.responseBody as OutLoadRecords
+                        const obj = objectConstructor(fieldsSearch, responseBody.result)
 
-                    console.log(responseBody.total, " records were found.")
+                        console.log(responseBody.total, " records were found.")
 
-                    obj.forEach((e)=>{
-                        const alcada = e as Alcada
-                        sendAuthorization(alcada)
-                    })
-                } catch (error) {
-                    console.log("Inválid Request - ", `StatusMessage: ${JSON.stringify((response as any).statusMessage, null, 2)}`)
-                    console.log(error)
+                        obj.forEach((e) => {
+                            const alcada = e as Alcada
+                            sendAuthorization(alcada)
+                        })
+                    } catch (error) {
+                        console.log("Inválid Request - ", `StatusMessage: ${JSON.stringify((response as any).statusMessage, null, 2)}`)
+                        console.log(error)
+                    }
                 }
-            }
-        )
+            )
+        } else {
+            console.log("Client whatsapp is being initialized.")
+        }
 
         await timer(timeOut);
     }
