@@ -1,2 +1,2 @@
-// import '@/ports/wa-automate'
+import '@/ports/whatsapp-js'
 import '@/core'

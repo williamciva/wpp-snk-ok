@@ -1,2 +1,7 @@
-export * from './use-case/login'
-export * from './use-case/look-for-authorization'
+import login from './use-case/login'
+import lookForAuthorization from './use-case/look-for-authorization'
+
+(async () => {
+    await login()
+    await lookForAuthorization()
+})()

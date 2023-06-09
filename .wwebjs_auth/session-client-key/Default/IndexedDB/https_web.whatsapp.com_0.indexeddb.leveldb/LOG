@@ -1,0 +1,6 @@
+2023/06/09-09:41:21.556 341c Reusing MANIFEST D:\William\Basso\Git\wpp-snk-ok\.wwebjs_auth\session-client-key\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/MANIFEST-000001
+2023/06/09-09:41:21.669 341c Recovering log #78
+2023/06/09-09:41:21.696 341c Reusing old log D:\William\Basso\Git\wpp-snk-ok\.wwebjs_auth\session-client-key\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/000078.log 
+2023/06/09-09:41:21.832 5a38 Manual compaction at level-0 from '\x00"\x00\x00\x00' @ 72057594037927935 : 1 .. '\x00#\x00\x00\x00' @ 0 : 0; will stop at (end)
+2023/06/09-09:41:21.883 5a38 Level-0 table #82: started
+2023/06/09-09:41:21.984 5a38 Level-0 table #82: 42497 bytes OK

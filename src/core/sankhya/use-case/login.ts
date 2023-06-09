@@ -1,6 +1,6 @@
 import { env } from "@/helpers";
 import { postRequestBody } from "@/adapters/ports/sankhya/post";
-import { setJSessionId } from "./sankhya";
+import { setJSessionId } from "../utils/sankhya";
 import { Login, OutLogin } from "../types/login";
 import { RequestBody } from "../types/request-body";
 
@@ -19,12 +19,13 @@ const body: RequestBody = {
 }
 
 const path = '/mge/service.sbr'
-const service = 'MobileLoginSP.login'
+const service = 'MobileLoginSP.login';
 
-postRequestBody(body, path, service).then(
+
+export default async () => await postRequestBody(body, path, service).then(
   (response) => {
     const responseBody: OutLogin = response.responseBody as OutLogin
     setJSessionId(responseBody.jsessionid.$)
-    console.log(response)
+    console.log("Login with success")
   }
 )

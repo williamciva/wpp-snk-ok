@@ -1,0 +1,20 @@
+2023/06/09-09:41:04.238 1b2c Reusing MANIFEST D:\William\Basso\Git\wpp-snk-ok\.wwebjs_auth\session-client-key\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/MANIFEST-000001
+2023/06/09-09:41:04.243 1b2c Recovering log #71
+2023/06/09-09:41:04.244 1b2c Reusing old log D:\William\Basso\Git\wpp-snk-ok\.wwebjs_auth\session-client-key\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/000071.log 
+2023/06/09-09:41:04.245 1b2c Delete type=2 #70
+2023/06/09-09:41:04.362 7968 Level-0 table #76: started
+2023/06/09-09:41:04.464 7968 Level-0 table #76: 9904 bytes OK
+2023/06/09-09:41:04.537 7968 Delete type=0 #71
+2023/06/09-09:41:04.538 7968 Manual compaction at level-0 from '\x00\x1d\x00\x00\x00' @ 72057594037927935 : 1 .. '\x00\x1e\x00\x00\x00' @ 0 : 0; will stop at (end)
+2023/06/09-09:41:04.539 7968 Manual compaction at level-1 from '\x00\x1d\x00\x00\x00' @ 72057594037927935 : 1 .. '\x00\x1e\x00\x00\x00' @ 0 : 0; will stop at '\x00\x1d\x06 \x03\x00\x00\x00\x00\x00\x80V@\x00\x01\x0b\x00I\x00d\x00T\x00t\x00l\x009\x000\x00D\x00a\x00y\x00s' @ 33125 : 1
+2023/06/09-09:41:04.539 7968 Compacting 1@1 + 1@2 files
+2023/06/09-09:41:04.627 7968 Generated table #77@1: 52 keys, 931 bytes
+2023/06/09-09:41:04.627 7968 Compacted 1@1 + 1@2 files => 931 bytes
+2023/06/09-09:41:04.695 7968 compacted to: files[ 0 0 1 0 0 0 0 ]
+2023/06/09-09:41:04.695 7968 Delete type=2 #76
+2023/06/09-09:41:04.709 974 Manual compaction at level-1 from '\x00\x1d\x06 \x03\x00\x00\x00\x00\x00\x80V@\x00\x01\x0b\x00I\x00d\x00T\x00t\x00l\x009\x000\x00D\x00a\x00y\x00s' @ 33125 : 1 .. '\x00\x1e\x00\x00\x00' @ 0 : 0; will stop at (end)
+2023/06/09-09:41:16.092 7968 Level-0 table #79: started
+2023/06/09-09:41:16.166 7968 Level-0 table #79: 20381 bytes OK
+2023/06/09-09:41:16.194 7968 Delete type=2 #73
+2023/06/09-09:41:16.194 7968 Delete type=0 #75
+2023/06/09-09:41:16.195 974 Manual compaction at level-0 from '\x00!\x00\x00\x00' @ 72057594037927935 : 1 .. '\x00"\x00\x00\x00' @ 0 : 0; will stop at (end)
