@@ -6,13 +6,13 @@ export type LoadRecords = {
     tryJoinedFields?: boolean,
     parallelLoader?: boolean,
     crudListener?: string,
-    criteria: {
+    criteria?: {
         expression: string,
         parameters: {
             type: string
             value: number | string | boolean
         }[]
-    } | undefined,
+    },
     ignoreListenerMethods?: string,
     useDefaultRowsLimit?: boolean,
     clientEventList?: {

@@ -3,45 +3,20 @@ import { env, timer } from "@/helpers";
 import { RequestBody } from "../types/request-body";
 import { LoadRecords, OutLoadRecords } from "../types/load-records";
 import { objectConstructor } from "../utils/load-records";
-import { Alcada } from "../types/alcada";
 import sendAuthorization from "./send-authorization";
 import { isReady } from "@/adapters/ports/whatsapp/is-ready";
+import { findFields } from "./find-fields";
 
 
 const timeOut: number = getTimeOutEnv();
 
-const fieldsSearch = [
-    "NUCHAVE",
-    "EVENTO",
-    "ViewEventoLiberacao.DESCRICAO",
-    "CODUSUSOLICIT",
-    "Solicitante.NOMEUSU",
-    "CODUSULIB",
-    "Usuario.NOMEUSU",
-    "Usuario.AD_WPPLIB",
-    "VLRATUAL",
-    "DHSOLICIT",
-    "OBSERVACAO",
-    "OBSLIB",
-    "CODPARC",
-    "Parceiro.NOMEPARC",
-    "CODEMP",
-    "Empresa.NOMEFANTASIA",
-    "CODVEND",
-    "Vendedor.APELIDO",
-    "DTNEG",
-    "CODTIPOPER",
-    "TipoOperacao.DESCROPER",
-    "VLRNOTA",
-    "TOTALDESCONTONOTA"
-]
+const fieldsSearch = findFields()
 
 const record: LoadRecords = {
     entityName: "ViewLiberacaoLimite",
     fields: fieldsSearch,
     tryJoinedFields: true,
     parallelLoader: true,
-    crudListener: "br.com.sankhya.modelcore.crudlisteners.LiberacaoLimitesCrudListener",
     criteria: {
         expression: "this.DHLIB IS NULL AND this.VLRLIBERADO < this.VLRATUAL AND Usuario.AD_WPPLIB IS NOT NULL",
         parameters: [{
@@ -73,8 +48,7 @@ export default async () => {
                         console.log(responseBody.total, " records were found.")
 
                         obj.forEach((e) => {
-                            const alcada = e as Alcada
-                            sendAuthorization(alcada)
+                            sendAuthorization(e)
                         })
                     } catch (error) {
                         console.log("Inválid Request - ", `StatusMessage: ${JSON.stringify((response as any).statusMessage, null, 2)}`)
