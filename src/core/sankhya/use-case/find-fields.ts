@@ -1,52 +1,50 @@
 import { postRequestBody } from "@/adapters/ports/sankhya/post";
 import { LoadRecords, OutLoadRecords } from "../types/load-records"
 import { RequestBody } from "../types/request-body"
-import { objectConstructor } from "../utils/load-records";
-import { Field } from "../types/fields";
 
-const fieldsSearch = [
-    "FIELD",
-    "NUFIELD"
-]
-
-const record: LoadRecords = {
-    entityName: "AD_WPPFIELD",
-    standAlone: true,
-    fields: fieldsSearch,
-    tryJoinedFields: true,
-    parallelLoader: true
-}
-
-const body: RequestBody = {
-    requestBody: record
-}
 
 const path = '/mge/service.sbr';
 const service = 'DatasetSP.loadRecords';
 
-export const findFields = (): string[] => {
+export const findFields = async (): Promise<string[]> => {
+    var record: LoadRecords = {
+        entityName: "AD_VWWPPCAMP",
+        fields: ["CAMPO"],
+        tryJoinedFields: true,
+        parallelLoader: true,
+        criteria: { expression: "this.EVENTO = ?", parameters: [{ type: 'N', value: 0 }] }
+    }
+
+    const body: RequestBody = {
+        requestBody: record
+    }
+
     var fields: string[] = []
 
-    postRequestBody(body, path, service).then(
-        (response) => {
-            try {
-                const responseBody: OutLoadRecords = response.responseBody as OutLoadRecords
-                const obj = objectConstructor(fieldsSearch, responseBody.result)
+    const responseBody: OutLoadRecords = (await postRequestBody(body, path, service)).responseBody as OutLoadRecords
 
-                obj.forEach((e) => {
-                    const fieldL = e as Field
-                    fields.push(fieldL.field)
-                })
+    responseBody.result.forEach((e) => typeof e[0] === 'string' ? fields.push(e[0]) : '')
 
-                return fields
-            } catch (error) {
-                console.log("Inválid Request - ", `StatusMessage: ${JSON.stringify((response as any).statusMessage, null, 2)}`)
-                console.log(error)
-            }
+    record.pagerID = responseBody.pagerID;
+
+    while (true) {
+        try {
+            const responseBody2: OutLoadRecords = (await postRequestBody(body, path, service)).responseBody as OutLoadRecords;
+
+            responseBody2.result.forEach((e) => {
+                if (typeof e[0] === 'string') {
+                    fields.push(e[0])
+                } else {
+                    new Error();
+                }
+            })
+
+        } catch (error) {
+            break;
         }
-    )
+    }
+
 
     fields.push("Usuario.AD_WPPLIB")
-
     return fields;
 }

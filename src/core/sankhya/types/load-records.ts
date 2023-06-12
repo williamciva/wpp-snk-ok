@@ -17,10 +17,12 @@ export type LoadRecords = {
     useDefaultRowsLimit?: boolean,
     clientEventList?: {
         clientrEvent: { $: string }[]
-    }
+    },
+    pagerID?: string
 }
 
 export type OutLoadRecords = {
     total: string,
-    result: [][]
+    result: string[][],
+    pagerID: string
 }
